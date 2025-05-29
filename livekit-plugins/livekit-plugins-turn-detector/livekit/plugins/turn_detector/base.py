@@ -16,11 +16,11 @@ from .models import HG_MODEL, MODEL_REVISIONS, ONNX_FILENAME, EOUModelType
 MAX_HISTORY_TOKENS = 128
 MAX_HISTORY_TURNS = 6
 
-
+proxys = {'http': 'http://127.0.0.1:7897', 'https': 'http://127.0.0.1:7897'}
 def _download_from_hf_hub(repo_id, filename, **kwargs):
     from huggingface_hub import hf_hub_download
 
-    local_path = hf_hub_download(repo_id=repo_id, filename=filename, **kwargs)
+    local_path = hf_hub_download(repo_id=repo_id, filename=filename, proxies=proxys, **kwargs)
     return local_path
 
 
@@ -73,6 +73,7 @@ class _EUORunnerBase(_InferenceRunner):
                 revision=self._model_revision,
                 local_files_only=True,
                 truncation_side="left",
+                proxies=proxys,
             )
 
         except (errors.LocalEntryNotFoundError, OSError):

@@ -34,9 +34,10 @@ class EOUPlugin(Plugin):
 
         from .base import _download_from_hf_hub
         from .models import HG_MODEL, MODEL_REVISIONS, ONNX_FILENAME
-
+        # use proxy 
+        proxys = {'http': 'http://127.0.0.1:7897', 'https': 'http://127.0.0.1:7897'}
         for revision in MODEL_REVISIONS.values():
-            AutoTokenizer.from_pretrained(HG_MODEL, revision=revision)
+            AutoTokenizer.from_pretrained(HG_MODEL, revision=revision, proxies=proxys)
             _download_from_hf_hub(HG_MODEL, ONNX_FILENAME, subfolder="onnx", revision=revision)
             _download_from_hf_hub(HG_MODEL, "languages.json", revision=revision)
 

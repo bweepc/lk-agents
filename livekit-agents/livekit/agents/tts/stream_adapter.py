@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import re
 from collections.abc import AsyncIterable
 from typing import Any
 
@@ -97,6 +98,11 @@ class StreamAdapterWrapper(SynthesizeStream):
 
         async def _synthesize() -> None:
             async for ev in self._sent_stream:
+                print("EEP stream_adapter.py _synthesize %s" %(ev.token))
+                sub_text=r'<think>.*?</think>'
+                pattern=re.compile(sub_text)
+                result=re.sub(pattern, '', ev.token).strip()
+                
                 async with self._tts._wrapped_tts.synthesize(
                     ev.token, conn_options=self._wrapped_tts_conn_options
                 ) as tts_stream:
