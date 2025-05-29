@@ -104,7 +104,7 @@ class StreamAdapterWrapper(SynthesizeStream):
                 result=re.sub(pattern, '', ev.token).strip()
                 
                 async with self._tts._wrapped_tts.synthesize(
-                    ev.token, conn_options=self._wrapped_tts_conn_options
+                    result, conn_options=self._wrapped_tts_conn_options
                 ) as tts_stream:
                     async for audio in tts_stream:
                         output_emitter.push(audio.frame.data.tobytes())
